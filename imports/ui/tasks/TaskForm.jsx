@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
-import { FormInputText } from './FormInputTextComponent';
+import { FormInputText } from '../FormInputTextComponent';
 
 export const TaskForm = ()=>{
     const [text, setText] = useState("");
@@ -22,13 +22,17 @@ export const TaskForm = ()=>{
     }
 
     return(
-        <Grid container spacing={1}>
+        <Grid container spacing={2} >
             <Grid item xs={10}>
                 <FormInputText text={text} setText={setText} />
             </Grid>
 
-            <Grid item xs={2}>
-                <Button variant="contained" startIcon={<AddIcon />} onClick={handleClick}>
+            <Grid item xs={2} >
+                <Button 
+                    variant="contained" 
+                    startIcon={<AddIcon />} 
+                    onClick={handleClick}
+                    style={{height: "99%"}}>
                     Add Task
                 </Button>
             </Grid>

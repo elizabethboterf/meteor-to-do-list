@@ -2,6 +2,7 @@ import { Meteor } from "meteor/meteor"
 import { Mongo } from 'meteor/mongo';
 import { Class } from 'meteor/jagi:astronomy';
 import dayjs from "dayjs";
+import { doesUserExist } from "./UsersCollection";
 
 export const TasksCollection = new Mongo.Collection('tasks');
 
@@ -55,17 +56,12 @@ export const Task= Class.create({
                 }
             }
         }
-})
+});
 
 Meteor.methods({
     "user.addTask": async (userId, taskInput) => {
         try {
-            const userForTask = await Meteor.users.findOne(userId)
-  
-            if(!userForTask) {
-                throw new Meteor.Error("User does not exist");
-            }
-            
+            const userForTask = await doesUserExist(userId);
             const taskToAdd = new Task({
                 text: taskInput,
                 userId
@@ -77,5 +73,31 @@ Meteor.methods({
             console.log(e);
             throw new Meteor.Error("Something went wrong");
         }
-    }
-  })
+    },
+//     "deleteAllTasksForUser" : async (userId) => {
+//         try {
+//             const userForDeletingTasks = await doesUserExist(userId);
+//             console.log(userForDeletingTasks);
+            
+//             await TasksCollection.remove({userId});
+//             return true;
+    
+//         } catch (e) {
+//             console.log(e);
+//             throw new Meteor.Error("Something went wrong");
+//         }
+//   }
+})
+
+// export const deleteAllTasksForUser = async (userId) => {
+//     try {
+//         const userForDeletingTasks = await doesUserExist(userId);
+//         console.log(userForDeletingTasks);
+        
+//         await TasksCollection.remove({userId});
+
+//     } catch (e) {
+//         console.log(e);
+//         throw new Meteor.Error("Something went wrong");
+//     }
+// }

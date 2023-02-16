@@ -1,18 +1,16 @@
-import { User } from "../imports/api/UsersCollection";
+import { doesUserExist } from "../imports/api/UsersCollection";
 
-// export const CreateUser = async ({ firstName, lastName }) => {
-//     const userToSave = new User({
-//         firstName,
-//         lastName
-//     });
 
-//     try {
-//         const savedUser = await userToSave.save()
-//         return savedUser
-//     } catch (e) {
-//         console.log(e)
-//         throw new Meteor.Error(e)
-//     }
+if(Meteor.isServer){
+    const user= Meteor.user();
 
-// }
+    Meteor.users.allow({
+        remove(user){
+            return user.profile && user.profile.admin;
+        }
+    })
+}
+    
+
+
 

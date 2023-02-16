@@ -1,9 +1,10 @@
 import React, {useState, useEffect, Fragment} from 'react';
 import {useTracker} from 'meteor/react-meteor-data';
-import { TasksContainer } from './Tasks.jsx';
-import { TaskForm } from './TaskForm';
+import { TasksContainer } from './tasks/Tasks.jsx';
+import { TaskForm } from './tasks/TaskForm';
 import { LoginForm } from './LoginForm.jsx';
-import { ResponsiveAppBar } from './AppBarForUser.jsx';
+import { AppBarPrivate } from './AppBarPrivate.jsx';
+import { Route, Routes } from 'react-router-dom'; // Changed switch -> Routes
 
 
 export const App = () => { 
@@ -14,22 +15,27 @@ export const App = () => {
   });
 
   return(
-    <div className= "main">
-      {user&&user.profile.admin? (
-        <Fragment>
-          <ResponsiveAppBar />
-          <div style={{paddingTop: '15px'}}>
-            <TaskForm />
-          </div>
-
-          <div className="filter">
-            later add filter options
-          </div>
-          <TasksContainer />
-        </Fragment>
-      ): (
-        <LoginForm />
-      )}
-    </div>
-  )
+    <Routes>
+        <Route exact path="/" element={<AppBarPublic/>} render={() => (
+          user? (
+            <Redirect to="/tasks" />
+          ) : (
+            <LoginForm />
+          )
+        )} />
+        <Route exact path="/tasks" render={() => (
+          user && user.profile.admin ? (
+            <Fragment>
+              <AppBarPrivate />
+              <div className="filter" style={{paddingTop: '15px'}} >
+                later add filter options
+              </div>
+              <TasksContainer/>
+            </Fragment>
+          ) : (
+            <Redirect to="/" />
+          )
+        )} />
+      </ Routes>
+  );
 };

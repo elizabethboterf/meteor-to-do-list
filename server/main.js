@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { TasksCollection } from '../imports/api/TasksCollection';
+import { createNewUser } from '../imports/api/UsersCollection';
 //import { Task } from '../imports/api/TasksCollection';
 
 const SEED_USERNAME = 'meteorite';
@@ -14,7 +15,7 @@ if(Meteor.isServer){
 Meteor.startup(() => {
 
   if (!Accounts.findUserByUsername(SEED_USERNAME)) {
-    Accounts.createUser({
+    createNewUser({
       username: SEED_USERNAME,
       password: SEED_PASSWORD,
     });

@@ -1,4 +1,4 @@
-import { Task } from "../imports/api/TasksCollection"
+import { Task, TasksCollection } from "../imports/api/TasksCollection"
 import { asyncForEach } from "../imports/api/helpers";
 
 //export const TasksCollection = new Mongo.Collection('tasks');

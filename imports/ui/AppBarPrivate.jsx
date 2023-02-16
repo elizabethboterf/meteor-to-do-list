@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,10 +15,12 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 
 const settingsDefault = ['Logout'];
 
-export const ResponsiveAppBar = () => {
+export const AppBarPrivate = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [viewUsers, setViewUsers] = useState(false);
+
+  const navigate= useNavigate();
 
   const user = Meteor.user();
   let settings = [];
@@ -46,10 +49,11 @@ export const ResponsiveAppBar = () => {
     switch(setting){
       case 'Logout':
         Meteor.logout();
+        navigate("/login");
         break;
       case 'View Users':
-        setViewUsers=true;
-        //react route to view users page
+        setViewUsers(true);
+        navigate("/view-users")
         break;
     }
 

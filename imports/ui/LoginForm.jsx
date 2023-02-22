@@ -12,8 +12,13 @@ export const LoginForm= ()=>{
 
     const submit= e => {
         e.preventDefault();
-        Meteor.loginWithPassword(username, password);
-        navigate("/tasks");
+        Meteor.loginWithPassword(username, password, (err)=>{
+            if(err){
+                console.log(err.message);
+            }
+            navigate("/tasks");
+        });
+        // make sure not to tnavigate with invalid creditionals
     }
 
     const newUser = async(e) => {

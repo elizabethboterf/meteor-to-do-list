@@ -43,7 +43,7 @@ export const createNewUser= async ({username, password}) => {
         //console.log(firstName, lastName, admin, username, password);
         
         userSchema.validateSync( 
-            { username, password, profile: { firstName, lastName, admin } },
+            { username, password, profile: { firstName, lastName }, admin },
             { strict: true });
     }catch(e){
         console.log(e);
@@ -55,9 +55,9 @@ export const createNewUser= async ({username, password}) => {
         password,
         profile:{
             firstName,
-            lastName,
-            admin
-        }
+            lastName
+        },
+        admin
     });
 
     return userId;
@@ -66,43 +66,22 @@ export const createNewUser= async ({username, password}) => {
 Meteor.methods({
     "user.deleteUser": async(userId, admin) =>{
         if(admin){
-            try{
-                await doesUserExist(userId);
-                
-                let result;
                 try {
-                    //await doesUserExist(userId);
-                    const tasksExist= TasksCollection.findOne({userId})
-                    if(tasksExist){
-                      await TasksCollection.deleteMany({userId});  
-                    }
-                    
-                    result= true;
+                    await doesUserExist(userId);
+
+                    const tasksForUser = await TasksCollection.find({ userId }).fetch();
+
+                    const deleteTasks = await TasksCollection.remove({ _id: { $in: tasksForUser.map(({ _id }) => _id)}})
+
+                    const deletedUser = await Meteor.users.remove({ _id: userId })
+
+                    return deletedUser
 
                 } catch (e) {
-                    console.log(e);
                     throw new Meteor.Error("Could not remove tasks");
                 }
-                
-                //check for success in deleting tasks;
-                if(result){
-                    try{
-                        //delete user from collection
-                        const deletedUser=Meteor.users.deleteMany({_id: userId})
-                        //return deleted user
-                        return deletedUser;
-                    }catch(e){
-                        console.log("failed to remove user");
-                        throw e;
-                    }
-                }else{
-                    console.log("failed to delete tasks, kept user");
-                }
-            }catch(e){
-                console.log(e);
-                //throw new Meteor.Error("Something went wrong");
-            } 
-        }else{
+        }
+        else {
             throw new Meteor.Error("You are not an administrator");
         }
         

@@ -25,3 +25,4 @@ accounts-password
 service-configuration
 meteortesting:mocha
 quave:testing
+quave:logged-user

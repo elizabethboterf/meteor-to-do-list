@@ -42,6 +42,14 @@ export const Task= Class.create({
                 console.log(e);
                 throw(e)
             }
+        },
+        async delete () {
+            try {
+                this.remove();
+            } catch(e){
+                console.log(e);
+                throw(e)
+            }
         }
     },
     events:{
@@ -74,30 +82,5 @@ Meteor.methods({
             throw new Meteor.Error("Something went wrong");
         }
     },
-//     "deleteAllTasksForUser" : async (userId) => {
-//         try {
-//             const userForDeletingTasks = await doesUserExist(userId);
-//             console.log(userForDeletingTasks);
-            
-//             await TasksCollection.remove({userId});
-//             return true;
-    
-//         } catch (e) {
-//             console.log(e);
-//             throw new Meteor.Error("Something went wrong");
-//         }
-//   }
 })
 
-// export const deleteAllTasksForUser = async (userId) => {
-//     try {
-//         const userForDeletingTasks = await doesUserExist(userId);
-//         console.log(userForDeletingTasks);
-        
-//         await TasksCollection.remove({userId});
-
-//     } catch (e) {
-//         console.log(e);
-//         throw new Meteor.Error("Something went wrong");
-//     }
-// }
